@@ -1,103 +1,210 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useState } from "react"
+import { BarChart } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { FileUploader } from "../components/file-uploader"
+import { JobsTable } from "../components/jobs-table"
+import { LocationChart } from "../components/location-chart"
+import { SalaryChart } from "../components/salary-chart"
+import { CompanyChart } from "../components/company-chart"
+import { JobTitleChart } from "../components/job-title-chart"
+import { DashboardFilters } from "../components/dashboard-filters"
+
+export default function Dashboard() {
+  const [jobData, setJobData] = useState<any[]>([])
+  const [filteredData, setFilteredData] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleFileUpload = async (file: File) => {
+    setIsLoading(true)
+    try {
+      const text = await file.text()
+      const data = JSON.parse(text)
+      const parsedData = Array.isArray(data) ? data : []
+      setJobData(parsedData)
+      setFilteredData(parsedData)
+    } catch (error) {
+      console.error("Error parsing JSON file:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+      <div className="flex min-h-screen flex-col">
+        <header className="sticky top-0 z-10 border-b px-5 bg-background bg-white">
+          <div className="container flex h-16 items-center justify-between py-4">
+            <div className="flex items-center gap-2">
+              <BarChart className="h-6 w-6" />
+              <h1 className="text-xl font-bold">Job Data Dashboard</h1>
+            </div>
+          </div>
+        </header>
+        <main className="flex-1">
+          <div className="px-5 py-4">
+            {jobData.length === 0 ? (
+                <Card className="mx-auto max-w-md">
+                  <CardHeader>
+                    <CardTitle>Upload Job Data</CardTitle>
+                    <CardDescription>Upload a JSON file containing job data to analyze.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <FileUploader onFileUpload={handleFileUpload} isLoading={isLoading} />
+                  </CardContent>
+                </Card>
+            ) : (
+                <>
+                  {/*<Card className="mb-4">*/}
+                  {/*  <CardHeader className="pb-2">*/}
+                  {/*    <CardTitle>Filters</CardTitle>*/}
+                  {/*    <CardDescription>Filter the job data by various criteria</CardDescription>*/}
+                  {/*  </CardHeader>*/}
+                  {/*  <CardContent>*/}
+                  {/*    <DashboardFilters data={jobData} onFilterChange={setFilteredData} />*/}
+                  {/*  </CardContent>*/}
+                  {/*</Card>*/}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+                  <Tabs defaultValue="overview">
+                    <div className="flex items-center justify-between">
+                      <TabsList>
+                        <TabsTrigger value="overview">Overview</TabsTrigger>
+                        <TabsTrigger value="location">Location</TabsTrigger>
+                        <TabsTrigger value="salary">Salary</TabsTrigger>
+                        <TabsTrigger value="companies">Companies</TabsTrigger>
+                        <TabsTrigger value="jobs">Jobs</TabsTrigger>
+                      </TabsList>
+                      <div className="flex items-center gap-2">
+                        <div className="text-sm text-muted-foreground">
+                          Showing {filteredData.length} of {jobData.length} jobs
+                        </div>
+                        <Button variant="outline" onClick={() => setJobData([])}>
+                          Upload New Data
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="mt-4 grid gap-4 h-dvh">
+                      <TabsContent value="overview" className="m-0">
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                          <Card>
+                            <CardHeader className="pb-2">
+                              <CardTitle>Total Jobs</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="text-4xl font-bold">{filteredData.length}</div>
+                            </CardContent>
+                          </Card>
+                          <Card>
+                            <CardHeader className="pb-2">
+                              <CardTitle>Average Salary</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="text-4xl font-bold">
+                                {filteredData.length > 0
+                                    ? `$${Math.round(
+                                        filteredData.reduce(
+                                            (acc, job) => acc + ((job.salary?.min || 0) + (job.salary?.max || 0)) / 2,
+                                            0,
+                                        ) / filteredData.length,
+                                    ).toLocaleString()}`
+                                    : "N/A"}
+                              </div>
+                            </CardContent>
+                          </Card>
+                          <Card>
+                            <CardHeader className="pb-2">
+                              <CardTitle>Unique Locations</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="text-4xl font-bold">
+                                {new Set(filteredData.map((job) => job.location)).size}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </div>
+                        <div className="mt-4 grid gap-4 md:grid-cols-2">
+                          <Card className="col-span-1">
+                            <CardHeader>
+                              <CardTitle>Jobs by Location</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <LocationChart data={filteredData} />
+                            </CardContent>
+                          </Card>
+                          <Card className="col-span-1">
+                            <CardHeader>
+                              <CardTitle>Salary Distribution</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <SalaryChart data={filteredData} />
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </TabsContent>
+                      <TabsContent value="location" className="m-0">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle>Jobs by Location</CardTitle>
+                            <CardDescription>Distribution of job postings across different locations</CardDescription>
+                          </CardHeader>
+                          <CardContent className="h-dvh">
+                            <LocationChart data={filteredData} />
+                          </CardContent>
+                        </Card>
+                      </TabsContent>
+                      <TabsContent value="salary" className="m-0">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle>Salary Analysis</CardTitle>
+                            <CardDescription>Salary distribution across job postings</CardDescription>
+                          </CardHeader>
+                          <CardContent className="h-dvh">
+                            <SalaryChart data={filteredData} />
+                          </CardContent>
+                        </Card>
+                      </TabsContent>
+                      <TabsContent value="companies" className="m-0">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle>Company Analysis</CardTitle>
+                            <CardDescription>Job postings by company</CardDescription>
+                          </CardHeader>
+                          <CardContent className="h-dvh">
+                            <CompanyChart data={filteredData} />
+                          </CardContent>
+                        </Card>
+                      </TabsContent>
+                      <TabsContent value="jobs" className="m-0">
+                        <div className="grid gap-4 md:grid-cols-2">
+                          <Card className="md:col-span-1">
+                            <CardHeader>
+                              <CardTitle>Job Title Analysis</CardTitle>
+                              <CardDescription>Salary by job title</CardDescription>
+                            </CardHeader>
+                            <CardContent className="h-dvh">
+                              <JobTitleChart data={filteredData} />
+                            </CardContent>
+                          </Card>
+                          <Card className="md:col-span-1">
+                            <CardHeader>
+                              <CardTitle>Job Listings</CardTitle>
+                              <CardDescription>Detailed job information</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                              <JobsTable data={filteredData} />
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </TabsContent>
+                    </div>
+                  </Tabs>
+                </>
+            )}
+          </div>
+        </main>
+      </div>
+  )
 }
