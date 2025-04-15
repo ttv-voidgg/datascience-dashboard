@@ -130,12 +130,31 @@ export function JobsTable({ data }: JobsTableProps) {
     return (
         <div className="w-full">
             <div className="flex items-center py-4">
+                <div className="flex items-center justify-end  mr-5 py-4">
                 <Input
-                    placeholder="Filter jobs..."
+                    placeholder="Filter jobs by Name"
                     value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
                     onChange={(event) => table.getColumn("title")?.setFilterValue(event.target.value)}
-                    className="max-w-sm"
+                    className="max-w-sm rounded-br-none rounded-tr-none border-r-1"
                 />
+                <Input
+                    placeholder="Filter jobs by Location"
+                    value={(table.getColumn("location")?.getFilterValue() as string) ?? ""}
+                    onChange={(event) => table.getColumn("location")?.setFilterValue(event.target.value)}
+                    className="max-w-sm rounded-bl-none rounded-tl-none border-l-1"
+                />
+                </div>
+                <div className="flex items-center justify-end  mx-5 space-x-2 py-4">
+                    <div className="text-sm text-muted-foreground">
+                        Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                    </div>
+                    <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+                        Previous
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+                        Next
+                    </Button>
+                </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">
@@ -194,17 +213,6 @@ export function JobsTable({ data }: JobsTableProps) {
                         )}
                     </TableBody>
                 </Table>
-            </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="text-sm text-muted-foreground">
-                    Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-                </div>
-                <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-                    Previous
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-                    Next
-                </Button>
             </div>
         </div>
     )
