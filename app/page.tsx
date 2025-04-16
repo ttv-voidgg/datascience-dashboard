@@ -13,6 +13,7 @@ import { SalaryChart } from "../components/salary-chart"
 import { CompanyChart } from "../components/company-chart"
 import { JobTitleChart } from "../components/job-title-chart"
 import { DashboardFilters } from "../components/dashboard-filters"
+import {ResponsiveContainer} from "recharts";
 
 export default function Dashboard() {
   const [jobData, setJobData] = useState<any[]>([])
@@ -45,7 +46,7 @@ export default function Dashboard() {
           </div>
         </header>
         <main className="flex-1">
-          <div className="px-5 py-4">
+          <div className="mx-5 py-4">
             {jobData.length === 0 ? (
                 <Card className="mx-auto max-w-md">
                   <CardHeader>
@@ -150,8 +151,10 @@ export default function Dashboard() {
                             <CardTitle>Jobs by Location</CardTitle>
                             <CardDescription>Distribution of job postings across different locations</CardDescription>
                           </CardHeader>
-                          <CardContent className="h-dvh">
+                          <CardContent className="h-[300rem]">
+                            <ResponsiveContainer width="90dvw">
                             <LocationChart data={filteredData} />
+                            </ResponsiveContainer>
                           </CardContent>
                         </Card>
                       </TabsContent>

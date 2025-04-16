@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo } from "react"
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import {Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis} from "recharts"
 
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
@@ -32,7 +32,7 @@ export function LocationChart({ data }: LocationChartProps) {
                     color: "hsl(var(--chart-1))",
                 },
             }}
-            className="h-dvh w-full"
+            className="h-[300rem] w-full"
         >
             <BarChart
                 accessibilityLayer
@@ -46,10 +46,10 @@ export function LocationChart({ data }: LocationChartProps) {
                 }}
             >
                 <CartesianGrid horizontal={false} />
-                <XAxis type="number" />
+                <XAxis type="number"  height={1} />
                 <YAxis dataKey="location" type="category" tickLine={false} axisLine={false} width={70} />
                 <ChartTooltip className="bg-white" content={<ChartTooltipContent />} />
-                <Bar dataKey="count" fill="var(--color-count)" radius={4} />
+                <Bar dataKey="count" fill="var(--color-count)" barSize={100} radius={4} />
             </BarChart>
         </ChartContainer>
     )
