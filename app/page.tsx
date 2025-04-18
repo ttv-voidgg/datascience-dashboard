@@ -56,6 +56,9 @@ export default function Dashboard() {
                   <CardContent>
                     <FileUploader onFileUpload={handleFileUpload} isLoading={isLoading} />
                   </CardContent>
+                  <p className="font-bold mx-5 mb-5 text-sm">You can scrape the data using:<br/><a className="text-blue-700 font-normal" href="https://github.com/ttv-voidgg/GlassDoor-Data-Scraper" target="_blank">https://github.com/ttv-voidgg/GlassDoor-Data-Scraper</a></p>
+                  <p className="font-bold mx-5 mb-5 text-sm">Merge the JSON Files:<br/><a className="text-blue-700 font-normal" href="https://www.merge-json-files.com/" target="_blank">https://www.merge-json-files.com/</a> </p>
+                  <p className="font-bold italic mx-5 my-5 text-xs text-center text-red-800">Send me a DM if you want a copy of the full script which includes the looping function.</p>
                 </Card>
             ) : (
                 <>
